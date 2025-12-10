@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { Plus, BookHeart, Trash2, Edit } from 'lucide-react';
+import { Plus, BookHeart, Trash2, Edit, ArrowDownAZ, ArrowUpAZ, ArrowDownUp } from 'lucide-react';
 
 import type { Manga } from '@/lib/types';
 import { initialMangaData } from '@/lib/data';
@@ -31,6 +31,8 @@ import { AddMangaForm } from '@/components/add-manga-form';
 import { MangaCard } from '@/components/manga-card';
 import { EditMangaForm } from '@/components/edit-manga-form';
 
+type SortOrder = 'default' | 'asc' | 'desc';
+
 export default function Home() {
   const [mangaCollection, setMangaCollection] = useState<Manga[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,6 +40,7 @@ export default function Home() {
   const [isClient, setIsClient] = useState(false);
   const [mangaToDelete, setMangaToDelete] = useState<Manga | null>(null);
   const [mangaToEdit, setMangaToEdit] = useState<Manga | null>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>('default');
 
   useEffect(() => {
     setIsClient(true);
@@ -82,12 +85,25 @@ export default function Home() {
   };
 
   const filteredManga = useMemo(() => {
-    return mangaCollection
+    let filtered = mangaCollection
       .filter((manga) => manga.status === activeTab)
       .filter((manga) =>
         manga.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
-  }, [mangaCollection, activeTab, searchTerm]);
+
+    if (sortOrder !== 'default') {
+      filtered.sort((a, b) => {
+        if (sortOrder === 'asc') {
+          return a.title.localeCompare(b.title);
+        } else {
+          return b.title.localeCompare(a.title);
+        }
+      });
+    }
+    
+    return filtered;
+
+  }, [mangaCollection, activeTab, searchTerm, sortOrder]);
   
   const onUpdateVolume = (mangaId: string, volumeId: number, newStatus: { isOwned?: boolean; isRead?: boolean }) => {
     setMangaCollection(prevCollection => {
@@ -105,6 +121,20 @@ export default function Home() {
         });
     });
   };
+
+  const handleSortChange = () => {
+    setSortOrder(prev => {
+        if (prev === 'default') return 'asc';
+        if (prev === 'asc') return 'desc';
+        return 'default';
+    });
+  }
+
+  const SortIcon = useMemo(() => {
+    if (sortOrder === 'asc') return ArrowUpAZ;
+    if (sortOrder === 'desc') return ArrowDownAZ;
+    return ArrowDownUp;
+  }, [sortOrder]);
 
   if (!isClient) {
     return (
@@ -131,6 +161,9 @@ export default function Home() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <Button variant="outline" size="icon" onClick={handleSortChange} aria-label="Sort manga">
+            <SortIcon className="h-4 w-4" />
+          </Button>
           <Dialog>
             <DialogTrigger asChild>
               <Button>
