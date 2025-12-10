@@ -16,7 +16,15 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { Manga } from '@/lib/types';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required.'),
@@ -25,6 +33,7 @@ const formSchema = z.object({
   status: z.enum(['owned', 'wishlist'], {
     required_error: 'You need to select a status.',
   }),
+  coverImage: z.string().min(1, 'Cover image is required.'),
 });
 
 interface EditMangaFormProps {
@@ -41,6 +50,7 @@ export function EditMangaForm({ manga, onUpdateManga }: EditMangaFormProps) {
       author: manga.author,
       totalVolumes: manga.totalVolumes,
       status: manga.status,
+      coverImage: manga.coverImage,
     },
   });
 
@@ -63,7 +73,7 @@ export function EditMangaForm({ manga, onUpdateManga }: EditMangaFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="title"
@@ -86,6 +96,30 @@ export function EditMangaForm({ manga, onUpdateManga }: EditMangaFormProps) {
               <FormControl>
                 <Input placeholder="e.g., Kentaro Miura" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="coverImage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cover Image</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a cover" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {PlaceHolderImages.map((image) => (
+                    <SelectItem key={image.id} value={image.id}>
+                      {image.description}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
