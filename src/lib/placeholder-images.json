@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "berserk-cover",
+      "description": "Cover of Berserk manga",
+      "imageUrl": "https://images.unsplash.com/photo-1482263231623-6121096b0d3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxkYXJrJTIwZmFudGFzeXxlbnwwfHx8fDE3NjUzNjIxMjh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dark fantasy"
+    },
+    {
+      "id": "one-piece-cover",
+      "description": "Cover of One Piece manga",
+      "imageUrl": "https://images.unsplash.com/photo-1515335648329-2c4104f5f758?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwaXJhdGUlMjBhZHZlbnR1cmV8ZW58MHx8fHwxNzY1MzYyMTI4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pirate adventure"
+    },
+    {
+      "id": "vagabond-cover",
+      "description": "Cover of Vagabond manga",
+      "imageUrl": "https://images.unsplash.com/photo-1728246950524-4b88d0c923c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c2FtdXJhaSUyMGR1ZWx8ZW58MHx8fHwxNzY1MzYyMTI4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "samurai duel"
+    },
+    {
+      "id": "monster-cover",
+      "description": "Cover of Monster manga",
+      "imageUrl": "https://images.unsplash.com/photo-1749936259701-af3ac36bc915?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwc3ljaG9sb2dpY2FsJTIwdGhyaWxsZXJ8ZW58MHx8fHwxNzY1MjkwMzM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "psychological thriller"
+    },
+    {
+      "id": "generic-cover",
+      "description": "Generic manga cover placeholder",
+      "imageUrl": "https://images.unsplash.com/photo-1528459105426-b9548367069b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxib29rJTIwY292ZXJ8ZW58MHx8fHwxNzY1MzMwODk3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "book cover"
+    }
+  ]
 }
