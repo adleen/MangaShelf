@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { Edit, Trash2, BookHeart, ChevronDown, ChevronUp } from 'lucide-react';
+import { Edit, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 
 import type { Manga, Volume } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -38,8 +38,15 @@ export function MangaCard({ manga, onEdit, onDelete, onUpdateVolume }: MangaCard
     [manga.volumes]
   );
   
-  const cover = PlaceHolderImages.find((img) => img.id === manga.coverImage) || PlaceHolderImages.find(img => img.id === 'generic-cover');
-  const coverUrl = cover?.imageUrl || `https://picsum.photos/seed/${manga.id}/400/600`;
+  const {coverUrl, imageHint} = useMemo(() => {
+    if (manga.coverImage.startsWith('data:image')) {
+      return { coverUrl: manga.coverImage, imageHint: 'custom cover' };
+    }
+    const cover = PlaceHolderImages.find((img) => img.id === manga.coverImage) || PlaceHolderImages.find(img => img.id === 'generic-cover');
+    const url = cover?.imageUrl || `https://picsum.photos/seed/${manga.id}/400/600`;
+    return { coverUrl: url, imageHint: cover?.imageHint || 'book cover' };
+  }, [manga.coverImage, manga.id]);
+
 
   const handleVolumeUpdate = (volumeId: number, newStatus: Partial<Volume>) => {
     onUpdateVolume(manga.id, volumeId, newStatus);
@@ -57,7 +64,7 @@ export function MangaCard({ manga, onEdit, onDelete, onUpdateVolume }: MangaCard
                 width={400}
                 height={600}
                 className="h-full w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-                data-ai-hint={cover?.imageHint || 'book cover'}
+                data-ai-hint={imageHint}
               />
             </div>
           </CardHeader>

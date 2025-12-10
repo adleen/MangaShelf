@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
+import { ChangeEvent, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -16,15 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import type { Manga } from '@/lib/types';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required.'),
@@ -43,6 +36,8 @@ interface EditMangaFormProps {
 
 export function EditMangaForm({ manga, onUpdateManga }: EditMangaFormProps) {
   const { toast } = useToast();
+  const [coverImagePreview, setCoverImagePreview] = useState<string | null>(manga.coverImage);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,6 +48,19 @@ export function EditMangaForm({ manga, onUpdateManga }: EditMangaFormProps) {
       coverImage: manga.coverImage,
     },
   });
+
+  const handleCoverImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const dataUrl = reader.result as string;
+        form.setValue('coverImage', dataUrl);
+        setCoverImagePreview(dataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const updatedManga: Manga = {
@@ -100,30 +108,13 @@ export function EditMangaForm({ manga, onUpdateManga }: EditMangaFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="coverImage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cover Image</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a cover" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {PlaceHolderImages.map((image) => (
-                    <SelectItem key={image.id} value={image.id}>
-                      {image.description}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel>Cover Image</FormLabel>
+          <FormControl>
+             <Input type="file" accept="image/*" onChange={handleCoverImageChange} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
         <FormField
           control={form.control}
           name="totalVolumes"
