@@ -11,7 +11,6 @@ export const initialMangaData: Manga[] = [
     volumes: Array.from({ length: 42 }, (_, i) => ({
       id: i + 1,
       isOwned: i < 20,
-      isRead: i < 5,
     })),
   },
   {
@@ -24,7 +23,6 @@ export const initialMangaData: Manga[] = [
     volumes: Array.from({ length: 108 }, (_, i) => ({
       id: i + 1,
       isOwned: i % 3 === 0,
-      isRead: i % 5 === 0 && i % 3 === 0,
     })),
   },
   {
@@ -37,7 +35,6 @@ export const initialMangaData: Manga[] = [
     volumes: Array.from({ length: 37 }, (_, i) => ({
       id: i + 1,
       isOwned: false,
-      isRead: false,
     })),
   },
   {
@@ -50,7 +47,6 @@ export const initialMangaData: Manga[] = [
     volumes: Array.from({ length: 9 }, (_, i) => ({
       id: i + 1,
       isOwned: true,
-      isRead: true,
     })),
   },
 ];

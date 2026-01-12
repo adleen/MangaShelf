@@ -33,11 +33,6 @@ export function MangaCard({ manga, onEdit, onDelete, onUpdateVolume }: MangaCard
     [manga.volumes]
   );
   
-  const readCount = useMemo(
-    () => manga.volumes.filter((v) => v.isRead).length,
-    [manga.volumes]
-  );
-  
   const {coverUrl, imageHint} = useMemo(() => {
     if (manga.coverImage.startsWith('data:image')) {
       return { coverUrl: manga.coverImage, imageHint: 'custom cover' };
@@ -95,11 +90,6 @@ export function MangaCard({ manga, onEdit, onDelete, onUpdateVolume }: MangaCard
                     <span>{ownedCount} / {manga.totalVolumes}</span>
                 </div>
                 <Progress value={(ownedCount / manga.totalVolumes) * 100} className="h-1.5" />
-                <div className="flex justify-between">
-                    <span>Read</span>
-                    <span>{readCount} / {ownedCount}</span>
-                </div>
-                <Progress value={ownedCount > 0 ? (readCount / ownedCount) * 100 : 0} className="h-1.5" />
              </div>
              <CollapsibleTrigger asChild>
                 <Button variant="ghost" size="sm" className="mt-2 h-7 w-full text-xs">

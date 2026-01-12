@@ -105,7 +105,7 @@ export default function Home() {
 
   }, [mangaCollection, activeTab, searchTerm, sortOrder]);
   
-  const onUpdateVolume = (mangaId: string, volumeId: number, newStatus: { isOwned?: boolean; isRead?: boolean }) => {
+  const onUpdateVolume = (mangaId: string, volumeId: number, newStatus: { isOwned?: boolean }) => {
     setMangaCollection(prevCollection => {
         return prevCollection.map(manga => {
             if (manga.id === mangaId) {

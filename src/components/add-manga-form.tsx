@@ -55,7 +55,6 @@ export function AddMangaForm({ onAddManga }: AddMangaFormProps) {
       volumes: Array.from({ length: values.totalVolumes }, (_, i) => ({
         id: i + 1,
         isOwned: false,
-        isRead: false,
       })),
     };
     onAddManga(newManga);

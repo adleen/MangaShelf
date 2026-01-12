@@ -1,7 +1,6 @@
 export interface Volume {
   id: number;
   isOwned: boolean;
-  isRead: boolean;
 }
 
 export interface Manga {

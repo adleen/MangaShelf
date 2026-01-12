@@ -70,7 +70,6 @@ export function EditMangaForm({ manga, onUpdateManga }: EditMangaFormProps) {
       const newVolumes = Array.from({ length: totalVolumes - currentVolumes.length }, (_, i) => ({
         id: currentVolumes.length + i + 1,
         isOwned: false,
-        isRead: false,
       }));
       updatedVolumes = [...updatedVolumes, ...newVolumes];
     } else if (totalVolumes < currentVolumes.length) {
