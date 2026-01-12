@@ -38,6 +38,7 @@ import { AddMangaForm } from '@/components/add-manga-form';
 import { MangaCard } from '@/components/manga-card';
 import { EditMangaForm } from '@/components/edit-manga-form';
 import { useToast } from '@/hooks/use-toast';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 
 type SortOrder = 'default' | 'asc' | 'desc';
@@ -277,7 +278,7 @@ export default function Home() {
             accept="application/json"
             onChange={handleImportData}
           />
-
+          <ThemeToggle />
         </div>
       </header>
 
@@ -383,5 +384,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
