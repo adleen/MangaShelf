@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { Edit, Trash2, ChevronDown, ChevronUp, Eye } from 'lucide-react';
+import { Edit, Trash2, ChevronDown, ChevronUp, Eye, BookOpen } from 'lucide-react';
 
 import type { Manga, Volume } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -102,6 +102,15 @@ export function MangaCard({ manga, onEdit, onDelete, onUpdateVolume, onViewCover
                 </Button>
              </CollapsibleTrigger>
           </CardFooter>
+        )}
+
+        {manga.status === 'wishlist' && (
+            <CardFooter className="p-3 pt-0">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <BookOpen />
+                    <span>{manga.totalVolumes} {manga.totalVolumes === 1 ? 'Volume' : 'Volumes'}</span>
+                </div>
+            </CardFooter>
         )}
         
         <CollapsibleContent>
