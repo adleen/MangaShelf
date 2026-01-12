@@ -7,7 +7,7 @@ export function Footer() {
         <div className="flex items-center gap-2">
           <BookHeart className="h-5 w-5 text-muted-foreground" />
           <p className="text-sm text-muted-foreground">
-            by{' '}
+            MangaShelf by{' '}
             <a
               href="https://github.com/adleen"
               target="_blank"
