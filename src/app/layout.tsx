@@ -27,8 +27,7 @@ export default function RootLayout({
       <body className="font-body flex h-full flex-col antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
           disableTransitionOnChange
         >
           <div className="flex-1">{children}</div>
