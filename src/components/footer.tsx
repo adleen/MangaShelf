@@ -7,7 +7,15 @@ export function Footer() {
         <div className="flex items-center gap-2">
           <BookHeart className="h-5 w-5 text-muted-foreground" />
           <p className="text-sm text-muted-foreground">
-            MangaShelf
+            by{' '}
+            <a
+              href="https://github.com/adleen"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium underline underline-offset-4"
+            >
+              adleen
+            </a>
           </p>
         </div>
         <p className="text-center text-sm leading-loose text-muted-foreground">
