@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { Plus, BookHeart, Trash2, Edit, ArrowDownAZ, ArrowUpAZ, ArrowDownUp, Eye } from 'lucide-react';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { Plus, BookHeart, Trash2, Edit, ArrowDownAZ, ArrowUpAZ, ArrowDownUp, Eye, Settings, FileUp, FileDown } from 'lucide-react';
 import Image from 'next/image';
 
 import type { Manga } from '@/lib/types';
@@ -27,10 +27,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AddMangaForm } from '@/components/add-manga-form';
 import { MangaCard } from '@/components/manga-card';
 import { EditMangaForm } from '@/components/edit-manga-form';
+import { useToast } from '@/hooks/use-toast';
+
 
 type SortOrder = 'default' | 'asc' | 'desc';
 
@@ -43,6 +51,9 @@ export default function Home() {
   const [mangaToEdit, setMangaToEdit] = useState<Manga | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('default');
   const [imageToView, setImageToView] = useState<{url: string, title: string} | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
 
   useEffect(() => {
     setIsClient(true);
@@ -138,6 +149,62 @@ export default function Home() {
     return ArrowDownUp;
   }, [sortOrder]);
 
+  const handleExportData = () => {
+    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(mangaCollection, null, 2)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = "manga-collection.json";
+    link.click();
+    toast({
+      title: 'Success!',
+      description: 'Your collection has been exported.',
+    });
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const text = e.target?.result;
+        if (typeof text !== 'string') {
+          throw new Error('File is not valid text.');
+        }
+        const importedData = JSON.parse(text);
+        
+        // Basic validation
+        if (Array.isArray(importedData) && importedData.every(item => 'id' in item && 'title' in item)) {
+          setMangaCollection(importedData);
+          toast({
+            title: 'Success!',
+            description: 'Your collection has been imported.',
+          });
+        } else {
+          throw new Error('Invalid file format.');
+        }
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Import Failed',
+          description: 'The selected file is not a valid collection file.',
+        });
+        console.error("Import error:", error);
+      }
+    };
+    reader.readAsText(file);
+    // Reset file input
+    event.target.value = '';
+  };
+
+
   if (!isClient) {
     return (
        <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -185,6 +252,32 @@ export default function Home() {
               <AddMangaForm onAddManga={handleAddManga} />
             </DialogContent>
           </Dialog>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon" aria-label="Settings">
+                <Settings className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleImportClick}>
+                <FileUp className="mr-2" />
+                Import Collection
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleExportData}>
+                <FileDown className="mr-2" />
+                Export Collection
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept="application/json"
+            onChange={handleImportData}
+          />
+
         </div>
       </header>
 
@@ -290,3 +383,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
