@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
+import { ChangeEvent } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,6 +27,7 @@ const formSchema = z.object({
   status: z.enum(['owned', 'wishlist'], {
     required_error: 'You need to select a status.',
   }),
+  coverImage: z.string().optional(),
 });
 
 interface AddMangaFormProps {
@@ -41,8 +43,21 @@ export function AddMangaForm({ onAddManga }: AddMangaFormProps) {
       author: '',
       totalVolumes: 1,
       status: 'owned',
+      coverImage: 'generic-cover',
     },
   });
+  
+  const handleCoverImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const dataUrl = reader.result as string;
+        form.setValue('coverImage', dataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const newManga: Manga = {
@@ -51,7 +66,7 @@ export function AddMangaForm({ onAddManga }: AddMangaFormProps) {
       author: values.author,
       totalVolumes: values.totalVolumes,
       status: values.status,
-      coverImage: 'generic-cover',
+      coverImage: values.coverImage || 'generic-cover',
       volumes: Array.from({ length: values.totalVolumes }, (_, i) => ({
         id: i + 1,
         isOwned: false,
@@ -68,7 +83,7 @@ export function AddMangaForm({ onAddManga }: AddMangaFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="title"
@@ -95,6 +110,13 @@ export function AddMangaForm({ onAddManga }: AddMangaFormProps) {
             </FormItem>
           )}
         />
+        <FormItem>
+            <FormLabel>Cover Image (Optional)</FormLabel>
+            <FormControl>
+                <Input type="file" accept="image/*" onChange={handleCoverImageChange} />
+            </FormControl>
+            <FormMessage />
+        </FormItem>
         <FormField
           control={form.control}
           name="totalVolumes"
