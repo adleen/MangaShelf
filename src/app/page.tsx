@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { Plus, BookHeart, Trash2, Edit, ArrowDownAZ, ArrowUpAZ, ArrowDownUp } from 'lucide-react';
+import { Plus, BookHeart, Trash2, Edit, ArrowDownAZ, ArrowUpAZ, ArrowDownUp, Eye } from 'lucide-react';
 import Image from 'next/image';
 
 import type { Manga } from '@/lib/types';
@@ -151,9 +151,12 @@ export default function Home() {
       <header className="mb-8 flex flex-col items-center justify-between gap-4 md:flex-row">
         <div className="flex items-center gap-3">
           <BookHeart className="h-10 w-10 text-primary" />
-          <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground">
-            MangaShelf
-          </h1>
+          <div>
+            <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground">
+              MangaShelf
+            </h1>
+            <p className="text-sm text-muted-foreground">Your personal manga collection tracker.</p>
+          </div>
         </div>
         <div className="flex w-full items-center gap-2 md:w-auto">
           <Input
