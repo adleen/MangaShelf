@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { Edit, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Edit, Trash2, ChevronDown, ChevronUp, Eye } from 'lucide-react';
 
 import type { Manga, Volume } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -23,9 +23,10 @@ interface MangaCardProps {
   onEdit: (manga: Manga) => void;
   onDelete: (manga: Manga) => void;
   onUpdateVolume: (mangaId: string, volumeId: number, newStatus: Partial<Volume>) => void;
+  onViewCover: (imageUrl: string) => void;
 }
 
-export function MangaCard({ manga, onEdit, onDelete, onUpdateVolume }: MangaCardProps) {
+export function MangaCard({ manga, onEdit, onDelete, onUpdateVolume, onViewCover }: MangaCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
   const ownedCount = useMemo(
@@ -64,6 +65,9 @@ export function MangaCard({ manga, onEdit, onDelete, onUpdateVolume }: MangaCard
             </div>
           </CardHeader>
           <div className="absolute bottom-0 left-0 right-0 z-10 flex justify-end bg-gradient-to-t from-black/60 via-black/30 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-white hover:bg-white/20" onClick={() => onViewCover(coverUrl)}>
+              <Eye />
+            </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8 text-white hover:bg-white/20" onClick={() => onEdit(manga)}>
               <Edit />
             </Button>

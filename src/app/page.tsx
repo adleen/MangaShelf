@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Plus, BookHeart, Trash2, Edit, ArrowDownAZ, ArrowUpAZ, ArrowDownUp } from 'lucide-react';
+import Image from 'next/image';
 
 import type { Manga } from '@/lib/types';
 import { initialMangaData } from '@/lib/data';
@@ -41,6 +42,7 @@ export default function Home() {
   const [mangaToDelete, setMangaToDelete] = useState<Manga | null>(null);
   const [mangaToEdit, setMangaToEdit] = useState<Manga | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>('default');
+  const [imageToView, setImageToView] = useState<{url: string, title: string} | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -198,6 +200,7 @@ export default function Home() {
                   onEdit={() => setMangaToEdit(manga)}
                   onDelete={() => setMangaToDelete(manga)}
                   onUpdateVolume={onUpdateVolume}
+                  onViewCover={(url) => setImageToView({url, title: manga.title})}
                 />
               ))}
             </div>
@@ -217,6 +220,7 @@ export default function Home() {
                   onEdit={() => setMangaToEdit(manga)}
                   onDelete={() => setMangaToDelete(manga)}
                   onUpdateVolume={onUpdateVolume}
+                  onViewCover={(url) => setImageToView({url, title: manga.title})}
                 />
               ))}
             </div>
@@ -229,6 +233,26 @@ export default function Home() {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* View Cover Dialog */}
+      <Dialog open={!!imageToView} onOpenChange={(open) => !open && setImageToView(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>{imageToView?.title} Cover</DialogTitle>
+          </DialogHeader>
+          {imageToView && (
+            <div className="flex items-center justify-center">
+              <Image
+                src={imageToView.url}
+                alt={`Cover of ${imageToView.title}`}
+                width={600}
+                height={900}
+                className="h-auto max-h-[80vh] w-auto rounded-md object-contain"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Edit Manga Dialog */}
       <Dialog open={!!mangaToEdit} onOpenChange={(open) => !open && setMangaToEdit(null)}>
